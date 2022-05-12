@@ -1,0 +1,42 @@
+.form {
+    background: #dbdbdb;
+    padding: 45px;
+    text-align: left;
+    width: fit-content;
+}
+
+.input {
+    font-family: sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.submit {
+    font-family: sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    width: 100%;
+    background: #4CAF50;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    transition: all 0.3 ease;
+    cursor: pointer;
+}
+
+.title {
+    margin: 0 15px 15px;
+}
+
+.message {
+    margin: 0 0 15px;
+    color: #b3b3b3;
+    font-size: 12px;
+}
