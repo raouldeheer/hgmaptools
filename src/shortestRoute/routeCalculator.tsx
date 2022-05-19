@@ -32,7 +32,7 @@ const RouteCalculator = (): JSX.Element => {
 
     const onSubmitFly = async (data: any) => {
         setATType(data.unit);
-        const result = await fetch(`https://hgwarmap.dphs.nl/api/battlefieldroute?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`)
+        const result = await fetch(`https://hgwarmap.dphs.nl/api/planeroute?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}&distance=${planes.get(data.unit)?.transportradius}`)
             .then(response => response.json() as unknown as RouteResult | null);
         setAnswer(result);
     };
