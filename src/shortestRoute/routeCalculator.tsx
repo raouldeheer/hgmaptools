@@ -100,8 +100,30 @@ const RouteCalculator = (): JSX.Element => {
                 <h2>Route</h2>
                 <p>Distance: {answer.distance.toFixed(2)}</p>
                 {ATType ? <>
-                    <p>Traveltime grey: {secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0)}</p>
-                    <p>Traveltime green: {secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5))}</p>
+                    <p>Traveltime:</p>
+                    <table>
+                        <tr>
+                            <th>Logistics Expert</th>
+                            <th>None</th>
+                            <th>Bronze</th>
+                            <th>Silver</th>
+                            <th>Gold</th>
+                        </tr>
+                        <tr>
+                            <td>Grey line</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0)}</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.1))}</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.15))}</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.2))}</td>
+                        </tr>
+                        <tr>
+                            <td>Green line</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5))}</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.1))}</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.15))}</td>
+                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.2))}</td>
+                        </tr>
+                    </table>
                 </> : null}
                 <p>Path:</p>
                 <ul>{answer.path.map(v => <RoutePoint key={v} id={v} />)}</ul>

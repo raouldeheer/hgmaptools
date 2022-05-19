@@ -1,5 +1,13 @@
-p, h2 {
+p,
+h2 {
     margin: 0;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
 }
 
 .total {
@@ -20,6 +28,7 @@ p, h2 {
     height: 100%;
     width: 100%;
 }
+
 .routeMap {
     position: absolute;
     top: 0;
@@ -48,7 +57,7 @@ p, h2 {
     background: #dbdbdb;
     padding: 5px 45px;
     text-align: center;
-    width: fit-content;
+    min-width: fit-content;
     height: fit-content;
 }
 
