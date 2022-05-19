@@ -47,7 +47,7 @@ const RouteCalculator = (): JSX.Element => {
             </div> : null}
         </div>
         <div className="Map">
-            <RouteMap />
+            <RouteMap answer={answer} />
         </div>
 
 
