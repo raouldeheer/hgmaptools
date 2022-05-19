@@ -59,7 +59,7 @@ const RouteCalculator = (): JSX.Element => {
                 <p>Distance: {answer.distance.toFixed(2)}</p>
                 {ATType ? <>
                     <p>Traveltime grey: {(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0).toFixed(2)} Seconds</p>
-                    <p>Traveltime green: {(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0).toFixed(2)} Seconds</p>
+                    <p>Traveltime green: {(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5)).toFixed(2)} Seconds</p>
                 </> : null}
                 <p>Path:</p>
                 <ul>{answer.path.map(v => <RoutePoint key={v} id={v} />)}</ul>
