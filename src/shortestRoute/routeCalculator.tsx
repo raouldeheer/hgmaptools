@@ -102,27 +102,31 @@ const RouteCalculator = (): JSX.Element => {
                 {ATType ? <>
                     <p>Traveltime:</p>
                     <table>
-                        <tr>
-                            <th>Logistics Expert</th>
-                            <th>None</th>
-                            <th>Bronze</th>
-                            <th>Silver</th>
-                            <th>Gold</th>
-                        </tr>
-                        <tr>
-                            <td>Grey line</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0)}</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.1))}</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.15))}</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.2))}</td>
-                        </tr>
-                        <tr>
-                            <td>Green line</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5))}</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.1))}</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.15))}</td>
-                            <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.2))}</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Logistics Expert</th>
+                                <th>None</th>
+                                <th>Bronze</th>
+                                <th>Silver</th>
+                                <th>Gold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Grey line</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0)}</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.1))}</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.15))}</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0 * (1 / 1.2))}</td>
+                            </tr>
+                            <tr>
+                                <td>Green line</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5))}</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.1))}</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.15))}</td>
+                                <td>{secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5) * (1 / 1.2))}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </> : null}
                 <p>Path:</p>

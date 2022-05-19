@@ -26,8 +26,8 @@ const RouteMap = ({ answer }: { answer: RouteResult | null; }): JSX.Element => {
     if (answer) {
         for (let prev = null, i = 0; i < answer.path.length; i++) {
             const element = answer.path[i];
-            points.push(<MapPoint imageRef={ref} id={element} />);
-            if (prev) lines.push(<MapLine imageRef={ref} id1={prev} id2={element} />);
+            points.push(<MapPoint imageRef={ref} id={element} key={element} />);
+            if (prev) lines.push(<MapLine imageRef={ref} id1={prev} id2={element} key={prev+element} />);
             prev = element;
         }
     }

@@ -7,12 +7,12 @@ const MapLine = ({ imageRef, id1, id2 }: { imageRef: React.RefObject<HTMLImageEl
     const [data2, setData2] = useState<Battlefield | null>(null);
 
     useEffect(() => {
-        fetch(`https://hgwarmap.dphs.nl/api/battlefield?id=${id1}`)
+        fetch(`https://hgwarmap.dphs.nl/api/battlefield/${id1}.json`)
             .then(data => data.json())
             .then(data => {
                 if (data) setData1(data);
             });
-        fetch(`https://hgwarmap.dphs.nl/api/battlefield?id=${id2}`)
+        fetch(`https://hgwarmap.dphs.nl/api/battlefield/${id2}.json`)
             .then(data => data.json())
             .then(data => {
                 if (data) setData2(data);
@@ -21,6 +21,7 @@ const MapLine = ({ imageRef, id1, id2 }: { imageRef: React.RefObject<HTMLImageEl
 
     return <>
         {(data1 && data2) ? <Line
+            key={id1+id2}
             points={[
                 data1.posx * ((imageRef.current?.width || 0) / totalWidth), 
                 data1.posy * ((imageRef.current?.height || 0) / totalHeight), 

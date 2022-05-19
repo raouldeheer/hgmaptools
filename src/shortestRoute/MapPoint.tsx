@@ -6,7 +6,7 @@ const MapPoint = ({ imageRef, id }: { imageRef: React.RefObject<HTMLImageElement
     const [data, setData] = useState<Battlefield | null>(null);
 
     useEffect(() => {
-        fetch(`https://hgwarmap.dphs.nl/api/battlefield?id=${id}`)
+        fetch(`https://hgwarmap.dphs.nl/api/battlefield/${id}.json`)
             .then(data => data.json())
             .then(data => {
                 if (data) setData(data);
@@ -15,6 +15,7 @@ const MapPoint = ({ imageRef, id }: { imageRef: React.RefObject<HTMLImageElement
 
     return <>
         {data ? <Circle
+            key={id}
             x={data.posx * ((imageRef.current?.width || 0) / totalWidth)}
             y={data.posy * ((imageRef.current?.height || 0) / totalHeight)}
             radius={30 * ((imageRef.current?.width || 0) / totalWidth)}
