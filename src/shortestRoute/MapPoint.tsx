@@ -1,8 +1,6 @@
-import { Ref, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
 import { Battlefield, totalHeight, totalWidth } from "./routeMap";
-
-
 
 const MapPoint = ({ imageRef, id }: { imageRef: React.RefObject<HTMLImageElement>, id: string; }): JSX.Element => {
     const [data, setData] = useState<Battlefield | null>(null);
@@ -14,7 +12,6 @@ const MapPoint = ({ imageRef, id }: { imageRef: React.RefObject<HTMLImageElement
                 if (data) setData(data);
             });
     }, [id]);
-
 
     return <>
         {data ? <Circle

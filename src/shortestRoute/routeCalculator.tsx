@@ -6,11 +6,7 @@ import "./routeCalculator.css";
 import RouteMap from "./routeMap";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
 
-const commandnodetemplateNameToSpeed = new Map<string, number>();
-
-commandnodetemplate.forEach(element => {
-    commandnodetemplateNameToSpeed.set(element.name, element.speed);
-});
+const commandnodetemplateNameToSpeed = new Map<string, number>(commandnodetemplate.map(e => ([e.name, e.speed])));
 
 export interface RouteResult {
     path: string[];
@@ -58,8 +54,8 @@ const RouteCalculator = (): JSX.Element => {
                 <h2>Route</h2>
                 <p>Distance: {answer.distance.toFixed(2)}</p>
                 {ATType ? <>
-                    <p>Traveltime grey: {(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0).toFixed(2)} Seconds</p>
-                    <p>Traveltime green: {(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5)).toFixed(2)} Seconds</p>
+                    <p>Traveltime grey: {secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * 1.0)}</p>
+                    <p>Traveltime green: {secondsToTimeString(answer.distance / commandnodetemplateNameToSpeed.get(ATType)! * (1 / 1.5))}</p>
                 </> : null}
                 <p>Path:</p>
                 <ul>{answer.path.map(v => <RoutePoint key={v} id={v} />)}</ul>
@@ -74,3 +70,14 @@ const RouteCalculator = (): JSX.Element => {
 };
 
 export default RouteCalculator;
+
+function secondsToTimeString(sec: number) {
+    const hours = Math.floor(sec / 3600);
+    const minutes = Math.floor((sec - (hours * 3600)) / 60);
+    const seconds = sec - (hours * 3600) - (minutes * 60);
+
+    const hoursStr = `${hours > 0 ? hours.toString() + " Hours " : ""}`;
+    const minutesStr = `${minutes > 0 ? minutes.toString() + " minutes " : ""}`;
+    const secondsStr = `${seconds > 0 ? seconds.toFixed(2) + " seconds " : ""}`;
+    return hoursStr + minutesStr + secondsStr;
+}
