@@ -1,3 +1,7 @@
+p, h2 {
+    margin: 0;
+}
+
 .total {
     width: 100vw;
     height: 100vh;
@@ -42,7 +46,7 @@
 
 .form {
     background: #dbdbdb;
-    padding: 45px;
+    padding: 5px 45px;
     text-align: center;
     width: fit-content;
     height: fit-content;
