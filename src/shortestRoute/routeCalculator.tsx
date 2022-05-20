@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import battlefields from "./battlefields.json";
 import airfields from "./airfields.json";
-import RoutePoint from "./routePoint";
 import "./routeCalculator.css";
 import RouteMap from "./routeMap";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
+import { CustomForm } from "./formUtils";
+import { Answer } from "./answerUtils";
 
 const commandnodetemplateNameToSpeed = new Map<string, number>(
     commandnodetemplate.map(e => [e.name, e.speed]),
@@ -25,11 +25,6 @@ export interface RouteResult {
 }
 
 const RouteCalculator = (): JSX.Element => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
     const [answer, setAnswer] = useState<RouteResult | null>(null);
     const [ATType, setATType] = useState<string | null>(null);
     const [formType, setFormType] = useState("Ground");
@@ -68,285 +63,50 @@ const RouteCalculator = (): JSX.Element => {
                         <option>Air</option>
                     </select>
                     {formType === "Ground" ? (
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <h1 className="title">City route</h1>
-
-                            <label htmlFor="bftitle1">
-                                Choose starting city:
-                            </label>
-                            <br />
-                            <select
-                                className="input"
-                                id="bftitle1"
-                                {...register("bftitle1")}
-                            >
-                                {battlefields.map(title => (
-                                    <option key={title + "1"} value={title}>
-                                        {title}
-                                    </option>
-                                ))}
-                            </select>
-                            <br />
-                            {errors.bftitle1 && (
-                                <>
-                                    <span className="message">
-                                        Starting city is required
-                                    </span>
-                                    <br />
-                                </>
-                            )}
-
-                            <label htmlFor="bftitle2">
-                                Choose destination city:
-                            </label>
-                            <br />
-                            <select
-                                className="input"
-                                id="bftitle2"
-                                {...register("bftitle2")}
-                            >
-                                {battlefields.map(title => (
-                                    <option key={title + "2"} value={title}>
-                                        {title}
-                                    </option>
-                                ))}
-                            </select>
-                            <br />
-                            {errors.bftitle2 && (
-                                <>
-                                    <span className="message">
-                                        Destination city is required
-                                    </span>
-                                    <br />
-                                </>
-                            )}
-
-                            <label htmlFor="unit">
-                                Choose assault team type:
-                            </label>
-                            <br />
-                            <select
-                                className="input"
-                                id="unit"
-                                {...register("unit")}
-                            >
-                                {Array.from(
-                                    commandnodetemplateNameToSpeed.keys(),
-                                ).map(title => (
-                                    <option key={title} value={title}>
-                                        {title}
-                                    </option>
-                                ))}
-                            </select>
-                            <br />
-                            {errors.unit && (
-                                <>
-                                    <span className="message">
-                                        Assault team is required
-                                    </span>
-                                    <br />
-                                </>
-                            )}
-
-                            <input className="submit" type="submit" />
-                        </form>
+                        <CustomForm
+                            title="City route"
+                            selectBoxes={[
+                                ["starting city", "bftitle1", battlefields],
+                                [
+                                    "destination airfield",
+                                    "bftitle2",
+                                    battlefields,
+                                ],
+                                [
+                                    "assault team type",
+                                    "unit",
+                                    Array.from(
+                                        commandnodetemplateNameToSpeed.keys(),
+                                    ),
+                                ],
+                            ]}
+                            onSubmit={onSubmit}
+                        />
                     ) : null}
                     {formType === "Air" ? (
-                        <form onSubmit={handleSubmit(onSubmitFly)}>
-                            <h1 className="title">City route</h1>
-
-                            <label htmlFor="bftitle1">
-                                Choose starting airfield:
-                            </label>
-                            <br />
-                            <select
-                                className="input"
-                                id="bftitle1"
-                                {...register("bftitle1")}
-                            >
-                                {airfields.map(title => (
-                                    <option key={title + "1"} value={title}>
-                                        {title}
-                                    </option>
-                                ))}
-                            </select>
-                            <br />
-                            {errors.bftitle1 && (
-                                <>
-                                    <span className="message">
-                                        Starting airfield is required
-                                    </span>
-                                    <br />
-                                </>
-                            )}
-
-                            <label htmlFor="bftitle2">
-                                Choose destination airfield:
-                            </label>
-                            <br />
-                            <select
-                                className="input"
-                                id="bftitle2"
-                                {...register("bftitle2")}
-                            >
-                                {airfields.map(title => (
-                                    <option key={title + "2"} value={title}>
-                                        {title}
-                                    </option>
-                                ))}
-                            </select>
-                            <br />
-                            {errors.bftitle2 && (
-                                <>
-                                    <span className="message">
-                                        Destination airfield is required
-                                    </span>
-                                    <br />
-                                </>
-                            )}
-
-                            <label htmlFor="unit">
-                                Choose assault team type:
-                            </label>
-                            <br />
-                            <select
-                                className="input"
-                                id="unit"
-                                {...register("unit")}
-                            >
-                                {Array.from(planes.keys()).map(title => (
-                                    <option key={title} value={title}>
-                                        {title}
-                                    </option>
-                                ))}
-                            </select>
-                            <br />
-                            {errors.unit && (
-                                <>
-                                    <span className="message">
-                                        Assault team is required
-                                    </span>
-                                    <br />
-                                </>
-                            )}
-
-                            <input className="submit" type="submit" />
-                        </form>
+                        <CustomForm
+                            title="Air route"
+                            selectBoxes={[
+                                ["starting airfield", "bftitle1", airfields],
+                                ["destination city", "bftitle2", airfields],
+                                [
+                                    "assault team type",
+                                    "unit",
+                                    Array.from(planes.keys()),
+                                ],
+                            ]}
+                            onSubmit={onSubmitFly}
+                        />
                     ) : null}
                 </div>
                 {answer ? (
-                    <div className="pathlist">
-                        <h2>Route</h2>
-                        <p>Distance: {answer.distance.toFixed(2)}</p>
-                        {ATType ? (
-                            <>
-                                <p>Traveltime:</p>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Logistics Expert</th>
-                                            <th>None</th>
-                                            <th>Bronze</th>
-                                            <th>Silver</th>
-                                            <th>Gold</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Grey line</td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        1.0,
-                                                )}
-                                            </td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        1.0 *
-                                                        (1 / 1.1),
-                                                )}
-                                            </td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        1.0 *
-                                                        (1 / 1.15),
-                                                )}
-                                            </td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        1.0 *
-                                                        (1 / 1.2),
-                                                )}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Green line</td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        (1 / 1.5),
-                                                )}
-                                            </td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        (1 / 1.5) *
-                                                        (1 / 1.1),
-                                                )}
-                                            </td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        (1 / 1.5) *
-                                                        (1 / 1.15),
-                                                )}
-                                            </td>
-                                            <td>
-                                                {secondsToTimeString(
-                                                    (answer.distance /
-                                                        commandnodetemplateNameToSpeed.get(
-                                                            ATType,
-                                                        )!) *
-                                                        (1 / 1.5) *
-                                                        (1 / 1.2),
-                                                )}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </>
-                        ) : null}
-                        <p>Path:</p>
-                        <ul>
-                            {answer.path.map(v => (
-                                <RoutePoint key={v} id={v} />
-                            ))}
-                        </ul>
-                    </div>
+                    <Answer
+                        answer={answer}
+                        ATType={ATType}
+                        commandnodetemplateNameToSpeed={
+                            commandnodetemplateNameToSpeed
+                        }
+                    />
                 ) : null}
             </div>
             <div className="Map">
@@ -357,14 +117,3 @@ const RouteCalculator = (): JSX.Element => {
 };
 
 export default RouteCalculator;
-
-function secondsToTimeString(sec: number) {
-    const hours = Math.floor(sec / 3600);
-    const minutes = Math.floor((sec - hours * 3600) / 60);
-    const seconds = sec - hours * 3600 - minutes * 60;
-
-    const hoursStr = `${hours > 0 ? hours.toString() + " Hours " : ""}`;
-    const minutesStr = `${minutes > 0 ? minutes.toString() + " minutes " : ""}`;
-    const secondsStr = `${seconds > 0 ? seconds.toFixed(2) + " seconds " : ""}`;
-    return hoursStr + minutesStr + secondsStr;
-}
