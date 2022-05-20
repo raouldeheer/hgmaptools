@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const RoutePoint = ({ id }: { id: string; }): JSX.Element => {
+const RoutePoint = ({ id }: { id: string }): JSX.Element => {
     const [name, setName] = useState("");
 
     useEffect(() => {
