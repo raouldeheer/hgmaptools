@@ -17,21 +17,26 @@ export const Answer = ({
             {ATType ? (
                 <>
                     {groundATs.has(ATType) ? (
-                        <TraveltimeGround
+                        <Traveltime
                             answer={answer}
                             ATType={ATType}
                             commandnodes={commandnodes}
+                            lines={[
+                                { name: "Grey line", mult: 1.0 },
+                                {
+                                    name: "Green line",
+                                    mult: 1 / 1.5,
+                                },
+                            ]}
                         />
                     ) : null}
                     {airATs.has(ATType) ? (
-                        <p>
-                            Traveltime:{" "}
-                            {secondsToTimeString(
-                                answer.distance /
-                                    commandnodes.get(ATType)!.speed /
-                                    2,
-                            )}
-                        </p>
+                        <Traveltime
+                            answer={answer}
+                            ATType={ATType}
+                            commandnodes={commandnodes}
+                            lines={[{ name: "Air", mult: 2.0 }]}
+                        />
                     ) : null}
                 </>
             ) : null}
@@ -45,14 +50,19 @@ export const Answer = ({
     );
 };
 
-const TraveltimeGround = ({
+const Traveltime = ({
     answer,
     ATType,
     commandnodes,
+    lines,
 }: {
     answer: RouteResult;
     ATType: string;
     commandnodes: Map<string, ATData>;
+    lines: {
+        name: string;
+        mult: number;
+    }[];
 }) => {
     const time = answer.distance / commandnodes.get(ATType)!.speed;
 
@@ -70,13 +80,7 @@ const TraveltimeGround = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {[
-                        { name: "Grey line", mult: 1.0 },
-                        {
-                            name: "Green line",
-                            mult: 1 / 1.5,
-                        },
-                    ].map(({ name, mult }) => (
+                    {lines.map(({ name, mult }) => (
                         <tr>
                             <td>{name}</td>
                             {[
