@@ -1,16 +1,14 @@
-import { airATs, FormTypes, groundATs, RouteResult } from "./routeCalculator";
+import { airATs, ATData, groundATs, RouteResult } from "./routeCalculator";
 import RoutePoint from "./routePoint";
 
 export const Answer = ({
     answer,
     ATType,
-    commandnodetemplateNameToSpeed,
-    formType,
+    commandnodes,
 }: {
     answer: RouteResult;
     ATType: string | null;
-    commandnodetemplateNameToSpeed: Map<string, number>;
-    formType: FormTypes;
+    commandnodes: Map<string, ATData>;
 }): JSX.Element => {
     return (
         <div className="pathlist">
@@ -22,9 +20,7 @@ export const Answer = ({
                         <TraveltimeGround
                             answer={answer}
                             ATType={ATType}
-                            commandnodetemplateNameToSpeed={
-                                commandnodetemplateNameToSpeed
-                            }
+                            commandnodes={commandnodes}
                         />
                     ) : null}
                     {airATs.has(ATType) ? (
@@ -32,9 +28,7 @@ export const Answer = ({
                             Traveltime:{" "}
                             {secondsToTimeString(
                                 answer.distance /
-                                    commandnodetemplateNameToSpeed.get(
-                                        ATType,
-                                    )! /
+                                    commandnodes.get(ATType)!.speed /
                                     2,
                             )}
                         </p>
@@ -54,13 +48,13 @@ export const Answer = ({
 const TraveltimeGround = ({
     answer,
     ATType,
-    commandnodetemplateNameToSpeed,
+    commandnodes,
 }: {
     answer: RouteResult;
     ATType: string;
-    commandnodetemplateNameToSpeed: Map<string, number>;
+    commandnodes: Map<string, ATData>;
 }) => {
-    const time = answer.distance / commandnodetemplateNameToSpeed.get(ATType)!;
+    const time = answer.distance / commandnodes.get(ATType)!.speed;
 
     return (
         <>

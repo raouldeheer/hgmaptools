@@ -7,30 +7,36 @@ import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
 import { CustomForm } from "./formUtils";
 import { Answer } from "./answerUtils";
 
-const commandnodetemplateNameToSpeed = new Map<string, number>(
-    commandnodetemplate.map(e => [e.name, e.speed]),
-);
-
-type ATData = {
+export type ATData = {
     speed: number;
     transportradius: number;
 };
 
-export const groundATs = new Map<string, ATData>(
+const DevCommandnodes = ["hq", "commander", "infantry", "reserve"];
+const commandnodes = new Map<string, ATData>(
     commandnodetemplate
-        .filter(e => e.transportradius < 0)
+        .filter(e => !DevCommandnodes.includes(e.name))
         .map(e => [
             e.name,
             { speed: e.speed, transportradius: e.transportradius },
         ]),
 );
 
-export const airATs = new Map<string, ATData>(
-    commandnodetemplate
-        .filter(e => e.transportradius > 0)
+export const groundATs = new Map<string, ATData>(
+    Array.from(commandnodes.entries())
+        .filter(e => e[1].transportradius < 0)
         .map(e => [
-            e.name,
-            { speed: e.speed, transportradius: e.transportradius },
+            e[0],
+            { speed: e[1].speed, transportradius: e[1].transportradius },
+        ]),
+);
+
+export const airATs = new Map<string, ATData>(
+    Array.from(commandnodes.entries())
+        .filter(e => e[1].transportradius > 0)
+        .map(e => [
+            e[0],
+            { speed: e[1].speed, transportradius: e[1].transportradius },
         ]),
 );
 
@@ -145,10 +151,7 @@ const RouteCalculator = (): JSX.Element => {
                     <Answer
                         answer={answer}
                         ATType={ATType}
-                        commandnodetemplateNameToSpeed={
-                            commandnodetemplateNameToSpeed
-                        }
-                        formType={formType}
+                        commandnodes={commandnodes}
                     />
                 ) : null}
             </div>
