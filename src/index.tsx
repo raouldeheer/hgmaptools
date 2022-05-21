@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import TagManager from "react-gtm-module";
+import FetchManager from "./fetchManager";
 
 TagManager.initialize({
     gtmId: "G-957G87MTC8",
@@ -11,10 +12,11 @@ TagManager.initialize({
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
+    const fetchManager = new FetchManager();
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <App />
+            <App fetchManager={fetchManager} />
         </React.StrictMode>,
     );
 
