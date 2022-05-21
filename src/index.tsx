@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import TagManager from "react-gtm-module";
-import FetchManager from "./fetchManager";
+import { createApiFetch } from "./api";
 
 TagManager.initialize({
     gtmId: "G-957G87MTC8",
@@ -12,11 +12,11 @@ TagManager.initialize({
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-    const fetchManager = new FetchManager();
+    const apiFetch = createApiFetch("https://hgwarmap.dphs.nl");
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <App fetchManager={fetchManager} />
+            <App apiFetch={apiFetch} />
         </React.StrictMode>,
     );
 

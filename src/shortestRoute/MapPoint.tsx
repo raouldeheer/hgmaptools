@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
-import FetchManager from "../fetchManager";
 import { Battlefield, totalHeight, totalWidth } from "./routeMap";
 
 const MapPoint = ({
     imageRef,
     id,
-    fetchManager,
+    apiFetch,
 }: {
     imageRef: React.RefObject<HTMLImageElement>;
     id: string;
-    fetchManager: FetchManager;
+    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
     const [data, setData] = useState<Battlefield | null>(null);
 
     useEffect(() => {
-        fetchManager.fetch<Battlefield>(`https://hgwarmap.dphs.nl/api/battlefield/${id}.json`)
-            .then(data => {
-                if (data) setData(data);
-            });
-    }, [id, fetchManager]);
+        apiFetch<Battlefield>(`/api/battlefield/${id}.json`).then(data => {
+            if (data) setData(data);
+        });
+    }, [id, apiFetch]);
 
     return (
         <>

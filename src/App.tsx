@@ -1,11 +1,14 @@
 import "./App.css";
-import FetchManager from "./fetchManager";
 import RouteCalculator from "./shortestRoute/routeCalculator";
 
-const App = ({ fetchManager }: { fetchManager: FetchManager; }): JSX.Element => {
+const App = ({
+    apiFetch,
+}: {
+    apiFetch: <T>(endpoint: string) => Promise<T | null>;
+}): JSX.Element => {
     return (
         <div className="App">
-            <RouteCalculator fetchManager={fetchManager}/>
+            <RouteCalculator apiFetch={apiFetch} />
         </div>
     );
 };

@@ -6,7 +6,6 @@ import RouteMap from "./routeMap";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
 import { CustomForm } from "./formUtils";
 import { Answer } from "./answerUtils";
-import FetchManager from "../fetchManager";
 
 export type ATData = {
     speed: number;
@@ -49,35 +48,45 @@ export enum FormTypes {
     ParaDrop = "Air to ground",
 }
 
-const RouteCalculator = ({ fetchManager }: { fetchManager: FetchManager; }): JSX.Element => {
+const RouteCalculator = ({
+    apiFetch,
+}: {
+    apiFetch: <T>(endpoint: string) => Promise<T | null>;
+}): JSX.Element => {
     const [answer, setAnswer] = useState<RouteResult | null>(null);
     const [ATType, setATType] = useState<string | null>(null);
     const [formType, setFormType] = useState(FormTypes.Ground);
 
     const onSubmit = async (data: any) => {
         setATType(data.unit);
-        setAnswer(await fetchManager.fetch<RouteResult>(
-            `https://hgwarmap.dphs.nl/api/battlefieldroute?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
-        ));
+        setAnswer(
+            await apiFetch<RouteResult>(
+                `/api/battlefieldroute?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
+            ),
+        );
     };
 
     const onSubmitFly = async (data: any) => {
         setATType(data.unit);
-        setAnswer(await fetchManager.fetch<RouteResult>(
-            `https://hgwarmap.dphs.nl/api/planeroute?bftitle1=${data.bftitle1
-            }&bftitle2=${data.bftitle2}&distance=${airATs.get(data.unit)?.transportradius
-            }`,
-        ));
+        setAnswer(
+            await apiFetch<RouteResult>(
+                `/api/planeroute?bftitle1=${data.bftitle1}&bftitle2=${
+                    data.bftitle2
+                }&distance=${airATs.get(data.unit)?.transportradius}`,
+            ),
+        );
     };
 
     const onSubmitPara = async (data: any) => {
         setATType(data.unit);
-        setAnswer(await fetchManager.fetch<RouteResult>(
-            `https://hgwarmap.dphs.nl/api/battlefieldseparation?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
-        ));
+        setAnswer(
+            await apiFetch<RouteResult>(
+                `/api/battlefieldseparation?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
+            ),
+        );
     };
 
-    const onChange = (e: { target: { value: string; }; }) => {
+    const onChange = (e: { target: { value: string } }) => {
         setFormType(e.target.value as FormTypes);
     };
 
@@ -149,12 +158,12 @@ const RouteCalculator = ({ fetchManager }: { fetchManager: FetchManager; }): JSX
                         answer={answer}
                         ATType={ATType}
                         commandnodes={commandnodes}
-                        fetchManager={fetchManager}
+                        apiFetch={apiFetch}
                     />
                 ) : null}
             </div>
             <div className="Map">
-                <RouteMap answer={answer} fetchManager={fetchManager}/>
+                <RouteMap answer={answer} apiFetch={apiFetch} />
             </div>
         </div>
     );

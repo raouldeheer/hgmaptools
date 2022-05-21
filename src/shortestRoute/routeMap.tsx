@@ -4,7 +4,6 @@ import { Layer, Stage } from "react-konva";
 import MapPoint from "./MapPoint";
 import MapLine from "./MapLine";
 import { useRef } from "react";
-import FetchManager from "../fetchManager";
 
 export interface Battlefield {
     id: string;
@@ -19,7 +18,13 @@ export interface Battlefield {
 export const totalWidth = 16384;
 export const totalHeight = 11520;
 
-const RouteMap = ({ answer, fetchManager }: { answer: RouteResult | null, fetchManager: FetchManager; }): JSX.Element => {
+const RouteMap = ({
+    answer,
+    apiFetch,
+}: {
+    answer: RouteResult | null;
+    apiFetch: <T>(endpoint: string) => Promise<T | null>;
+}): JSX.Element => {
     const ref = useRef<HTMLImageElement>(null);
 
     const points = [];
@@ -27,7 +32,14 @@ const RouteMap = ({ answer, fetchManager }: { answer: RouteResult | null, fetchM
     if (answer) {
         for (let prev = null, i = 0; i < answer.path.length; i++) {
             const element = answer.path[i];
-            points.push(<MapPoint imageRef={ref} id={element} key={element} fetchManager={fetchManager} />);
+            points.push(
+                <MapPoint
+                    imageRef={ref}
+                    id={element}
+                    key={element}
+                    apiFetch={apiFetch}
+                />,
+            );
             if (prev)
                 lines.push(
                     <MapLine
@@ -35,7 +47,7 @@ const RouteMap = ({ answer, fetchManager }: { answer: RouteResult | null, fetchM
                         id1={prev}
                         id2={element}
                         key={prev + element}
-                        fetchManager={fetchManager}
+                        apiFetch={apiFetch}
                     />,
                 );
             prev = element;

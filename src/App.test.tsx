@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import App from "./App";
-import FetchManager from "./fetchManager";
+import { createApiFetch } from "./api";
 
 test("renders learn react link", () => {
-    const fetchManager = new FetchManager();
-    render(<App fetchManager={fetchManager} />);
+    const apiFetch = createApiFetch("https://hgwarmap.dphs.nl");
+    render(<App apiFetch={apiFetch} />);
     const linkElement = screen.getByText(/learn react/i);
     expect(linkElement).toBeInTheDocument();
 });

@@ -13,11 +13,11 @@ const SelectBox = ({
     register,
     errors,
 }: {
-    name: string,
-    label: string,
-    options: string[],
-    register: UseFormRegister<FieldValues>,
-    errors: FieldErrors,
+    name: string;
+    label: string;
+    options: string[];
+    register: UseFormRegister<FieldValues>;
+    errors: FieldErrors;
 }): JSX.Element => (
     <>
         <label htmlFor={label}>Choose {name}:</label>
@@ -56,9 +56,16 @@ export const CustomForm = ({
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                {selectBoxes.map(box =>
-                    <SelectBox key={box[0]} name={box[0]} label={box[1]} options={box[2]} register={register} errors={errors} />
-                )}
+                {selectBoxes.map(box => (
+                    <SelectBox
+                        key={box[0]}
+                        name={box[0]}
+                        label={box[1]}
+                        options={box[2]}
+                        register={register}
+                        errors={errors}
+                    />
+                ))}
                 <input className="submit" type="submit" />
             </form>
         </>

@@ -1,4 +1,3 @@
-import FetchManager from "../fetchManager";
 import { airATs, ATData, groundATs, RouteResult } from "./routeCalculator";
 import RoutePoint from "./routePoint";
 
@@ -6,12 +5,12 @@ export const Answer = ({
     answer,
     ATType,
     commandnodes,
-    fetchManager,
+    apiFetch,
 }: {
     answer: RouteResult;
     ATType: string | null;
     commandnodes: Map<string, ATData>;
-    fetchManager: FetchManager;
+    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
     return (
         <div className="pathlist">
@@ -46,7 +45,7 @@ export const Answer = ({
             <p>Path:</p>
             <ul>
                 {answer.path.map(v => (
-                    <RoutePoint key={v} id={v} fetchManager={fetchManager} />
+                    <RoutePoint key={v} id={v} apiFetch={apiFetch} />
                 ))}
             </ul>
         </div>
