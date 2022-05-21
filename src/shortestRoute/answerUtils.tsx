@@ -1,27 +1,45 @@
-import { RouteResult } from "./routeCalculator";
+import { airATs, FormTypes, groundATs, RouteResult } from "./routeCalculator";
 import RoutePoint from "./routePoint";
 
 export const Answer = ({
     answer,
     ATType,
     commandnodetemplateNameToSpeed,
+    formType,
 }: {
     answer: RouteResult;
     ATType: string | null;
     commandnodetemplateNameToSpeed: Map<string, number>;
+    formType: FormTypes;
 }): JSX.Element => {
     return (
         <div className="pathlist">
             <h2>Route</h2>
             <p>Distance: {answer.distance.toFixed(2)}</p>
             {ATType ? (
-                <Traveltime
-                    answer={answer}
-                    ATType={ATType}
-                    commandnodetemplateNameToSpeed={
-                        commandnodetemplateNameToSpeed
-                    }
-                />
+                <>
+                    {groundATs.has(ATType) ? (
+                        <TraveltimeGround
+                            answer={answer}
+                            ATType={ATType}
+                            commandnodetemplateNameToSpeed={
+                                commandnodetemplateNameToSpeed
+                            }
+                        />
+                    ) : null}
+                    {airATs.has(ATType) ? (
+                        <p>
+                            Traveltime:{" "}
+                            {secondsToTimeString(
+                                answer.distance /
+                                    commandnodetemplateNameToSpeed.get(
+                                        ATType,
+                                    )! /
+                                    2,
+                            )}
+                        </p>
+                    ) : null}
+                </>
             ) : null}
             <p>Path:</p>
             <ul>
@@ -33,7 +51,7 @@ export const Answer = ({
     );
 };
 
-const Traveltime = ({
+const TraveltimeGround = ({
     answer,
     ATType,
     commandnodetemplateNameToSpeed,
@@ -88,10 +106,18 @@ const Traveltime = ({
 function secondsToTimeString(sec: number) {
     const hours = Math.floor(sec / 3600);
     const minutes = Math.floor((sec - hours * 3600) / 60);
-    const seconds = sec - hours * 3600 - minutes * 60;
+    const seconds = Math.floor(sec - hours * 3600 - minutes * 60);
 
-    const hoursStr = `${hours > 0 ? hours.toString() + " H " : ""}`;
-    const minutesStr = `${minutes > 0 ? minutes.toString() + " M " : ""}`;
-    const secondsStr = `${seconds > 0 ? seconds.toFixed(2) + " S" : ""}`;
-    return hoursStr + minutesStr + secondsStr;
+    const hoursStr = `${hours > 0 ? hours.toString() + ":" : ""}`;
+    const minutesStr = `${minutes > 0 ? minutes.toString() + ":" : ""}`;
+    const secondsStr = `${
+        seconds > 0 ? seconds.toString().padStart(2, "0") : ""
+    }`;
+
+    let returnStr = "";
+    if (hoursStr) returnStr += hoursStr;
+    if (minutesStr)
+        returnStr += hoursStr ? minutesStr.padStart(2, "0") : minutesStr;
+    returnStr += minutesStr ? secondsStr.padStart(2, "0") : secondsStr;
+    return returnStr;
 }

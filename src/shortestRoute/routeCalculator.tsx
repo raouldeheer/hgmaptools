@@ -10,7 +10,22 @@ import { Answer } from "./answerUtils";
 const commandnodetemplateNameToSpeed = new Map<string, number>(
     commandnodetemplate.map(e => [e.name, e.speed]),
 );
-const planes = new Map<string, { speed: number; transportradius: number }>(
+
+type ATData = {
+    speed: number;
+    transportradius: number;
+};
+
+export const groundATs = new Map<string, ATData>(
+    commandnodetemplate
+        .filter(e => e.transportradius < 0)
+        .map(e => [
+            e.name,
+            { speed: e.speed, transportradius: e.transportradius },
+        ]),
+);
+
+export const airATs = new Map<string, ATData>(
     commandnodetemplate
         .filter(e => e.transportradius > 0)
         .map(e => [
@@ -24,10 +39,16 @@ export interface RouteResult {
     distance: number;
 }
 
+export enum FormTypes {
+    Ground = "Ground",
+    Air = "Air",
+    ParaDrop = "ParaDrop",
+}
+
 const RouteCalculator = (): JSX.Element => {
     const [answer, setAnswer] = useState<RouteResult | null>(null);
     const [ATType, setATType] = useState<string | null>(null);
-    const [formType, setFormType] = useState("Ground");
+    const [formType, setFormType] = useState(FormTypes.Ground);
 
     const onSubmit = async (data: any) => {
         setATType(data.unit);
@@ -43,15 +64,22 @@ const RouteCalculator = (): JSX.Element => {
             `https://hgwarmap.dphs.nl/api/planeroute?bftitle1=${
                 data.bftitle1
             }&bftitle2=${data.bftitle2}&distance=${
-                planes.get(data.unit)?.transportradius
+                airATs.get(data.unit)?.transportradius
             }`,
         ).then(response => response.json() as unknown as RouteResult | null);
         setAnswer(result);
     };
 
+    const onSubmitPara = async (data: any) => {
+        setATType(data.unit);
+        const result = await fetch(
+            `https://hgwarmap.dphs.nl/api/battlefieldseparation?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
+        ).then(response => response.json() as unknown as RouteResult | null);
+        setAnswer(result);
+    };
+
     const onChange = (e: { target: { value: string } }) => {
-        setFormType(e.target.value);
-        console.log(e.target.value);
+        setFormType(e.target.value as FormTypes);
     };
 
     return (
@@ -59,10 +87,11 @@ const RouteCalculator = (): JSX.Element => {
             <div className="Calculator">
                 <div className="form">
                     <select className="input" name="select" onChange={onChange}>
-                        <option>Ground</option>
-                        <option>Air</option>
+                        {Object.values(FormTypes).map(type => (
+                            <option>{type}</option>
+                        ))}
                     </select>
-                    {formType === "Ground" ? (
+                    {formType === FormTypes.Ground ? (
                         <CustomForm
                             title="City route"
                             selectBoxes={[
@@ -75,27 +104,40 @@ const RouteCalculator = (): JSX.Element => {
                                 [
                                     "assault team type",
                                     "unit",
-                                    Array.from(
-                                        commandnodetemplateNameToSpeed.keys(),
-                                    ),
+                                    Array.from(groundATs.keys()),
                                 ],
                             ]}
                             onSubmit={onSubmit}
                         />
                     ) : null}
-                    {formType === "Air" ? (
+                    {formType === FormTypes.Air ? (
                         <CustomForm
                             title="Air route"
                             selectBoxes={[
                                 ["starting airfield", "bftitle1", airfields],
-                                ["destination city", "bftitle2", airfields],
+                                ["destination airfield", "bftitle2", airfields],
                                 [
                                     "assault team type",
                                     "unit",
-                                    Array.from(planes.keys()),
+                                    Array.from(airATs.keys()),
                                 ],
                             ]}
                             onSubmit={onSubmitFly}
+                        />
+                    ) : null}
+                    {formType === FormTypes.ParaDrop ? (
+                        <CustomForm
+                            title="Paradrop"
+                            selectBoxes={[
+                                ["starting airfield", "bftitle1", airfields],
+                                ["destination city", "bftitle2", battlefields],
+                                [
+                                    "assault team type",
+                                    "unit",
+                                    Array.from(airATs.keys()),
+                                ],
+                            ]}
+                            onSubmit={onSubmitPara}
                         />
                     ) : null}
                 </div>
@@ -106,6 +148,7 @@ const RouteCalculator = (): JSX.Element => {
                         commandnodetemplateNameToSpeed={
                             commandnodetemplateNameToSpeed
                         }
+                        formType={formType}
                     />
                 ) : null}
             </div>
