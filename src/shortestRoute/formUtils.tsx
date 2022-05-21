@@ -6,13 +6,19 @@ import {
     SubmitHandler,
 } from "react-hook-form";
 
-const selectBox = (
+const SelectBox = ({
+    name,
+    label,
+    options,
+    register,
+    errors,
+}: {
     name: string,
     label: string,
     options: string[],
     register: UseFormRegister<FieldValues>,
     errors: FieldErrors,
-): JSX.Element => (
+}): JSX.Element => (
     <>
         <label htmlFor={label}>Choose {name}:</label>
         <br />
@@ -51,7 +57,7 @@ export const CustomForm = ({
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 {selectBoxes.map(box =>
-                    selectBox(box[0], box[1], box[2], register, errors),
+                    <SelectBox key={box[0]} name={box[0]} label={box[1]} options={box[2]} register={register} errors={errors} />
                 )}
                 <input className="submit" type="submit" />
             </form>

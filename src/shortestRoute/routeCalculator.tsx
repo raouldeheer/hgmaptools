@@ -98,7 +98,7 @@ const RouteCalculator = (): JSX.Element => {
                         onChange={onChange}
                     >
                         {Object.values(FormTypes).map(type => (
-                            <option>{type}</option>
+                            <option key={type}>{type}</option>
                         ))}
                     </select>
                     {formType === FormTypes.Ground ? (

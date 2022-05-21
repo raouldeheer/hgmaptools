@@ -3,6 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import TagManager from "react-gtm-module";
+
+TagManager.initialize({
+    gtmId: "G-957G87MTC8",
+});
 
 const rootElement = document.getElementById("root");
 if (rootElement) {

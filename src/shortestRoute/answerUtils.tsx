@@ -81,15 +81,15 @@ const Traveltime = ({
                 </thead>
                 <tbody>
                     {lines.map(({ name, mult }) => (
-                        <tr>
-                            <td>{name}</td>
+                        <tr key={name}>
+                            <td key={`name${name}`}>{name}</td>
                             {[
                                 mult,
                                 mult * (1 / 1.1),
                                 mult * (1 / 1.15),
                                 mult * (1 / 1.2),
                             ].map(multiplier => (
-                                <td>
+                                <td key={`name${multiplier}`}>
                                     {secondsToTimeString(time * multiplier)}
                                 </td>
                             ))}
