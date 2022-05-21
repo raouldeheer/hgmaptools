@@ -46,9 +46,9 @@ export interface RouteResult {
 }
 
 export enum FormTypes {
-    Ground = "Ground",
-    Air = "Air",
-    ParaDrop = "ParaDrop",
+    Ground = "Ground to ground",
+    Air = "Air to air",
+    ParaDrop = "Air to ground",
 }
 
 const RouteCalculator = (): JSX.Element => {
@@ -92,14 +92,20 @@ const RouteCalculator = (): JSX.Element => {
         <div className="total">
             <div className="Calculator">
                 <div className="form">
-                    <select className="input" name="select" onChange={onChange}>
+                    <label htmlFor="formSelect">Choose movement type:</label>
+                    <br />
+                    <select
+                        className="input"
+                        name="select"
+                        id="formSelect"
+                        onChange={onChange}
+                    >
                         {Object.values(FormTypes).map(type => (
                             <option>{type}</option>
                         ))}
                     </select>
                     {formType === FormTypes.Ground ? (
                         <CustomForm
-                            title="City route"
                             selectBoxes={[
                                 ["starting city", "bftitle1", battlefields],
                                 [
@@ -118,7 +124,6 @@ const RouteCalculator = (): JSX.Element => {
                     ) : null}
                     {formType === FormTypes.Air ? (
                         <CustomForm
-                            title="Air route"
                             selectBoxes={[
                                 ["starting airfield", "bftitle1", airfields],
                                 ["destination airfield", "bftitle2", airfields],
@@ -133,7 +138,6 @@ const RouteCalculator = (): JSX.Element => {
                     ) : null}
                     {formType === FormTypes.ParaDrop ? (
                         <CustomForm
-                            title="Paradrop"
                             selectBoxes={[
                                 ["starting airfield", "bftitle1", airfields],
                                 ["destination city", "bftitle2", battlefields],

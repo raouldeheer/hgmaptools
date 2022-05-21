@@ -36,11 +36,9 @@ const selectBox = (
 );
 
 export const CustomForm = ({
-    title,
     selectBoxes,
     onSubmit,
 }: {
-    title: string;
     selectBoxes: [string, string, string[]][];
     onSubmit: SubmitHandler<FieldValues>;
 }): JSX.Element => {
@@ -52,7 +50,6 @@ export const CustomForm = ({
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <h1 className="title">{title}</h1>
                 {selectBoxes.map(box =>
                     selectBox(box[0], box[1], box[2], register, errors),
                 )}
