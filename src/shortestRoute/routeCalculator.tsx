@@ -12,19 +12,16 @@ export type ATData = {
     transportradius: number;
 };
 
-const DevCommandnodes = ["hq", "commander", "infantry", "reserve"];
-const commandnodes = new Map<string, ATData>(
+const DevCommandnodes = ["hq", "commander", "reserve"];
+const commandnodes = new Map<string, any>(
     commandnodetemplate
         .filter(e => !DevCommandnodes.includes(e.name))
-        .map(e => [
-            e.name,
-            { speed: e.speed, transportradius: e.transportradius },
-        ]),
+        .map(e => [e.name, e]),
 );
 
 export const groundATs = new Map<string, ATData>(
     Array.from(commandnodes.entries())
-        .filter(e => e[1].transportradius < 0)
+        .filter(e => e[1].transportradius < 0 && e[1].convertTo === "0")
         .map(e => [
             e[0],
             { speed: e[1].speed, transportradius: e[1].transportradius },
