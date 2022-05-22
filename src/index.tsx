@@ -3,19 +3,15 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { GTMProvider } from "@elgorditosalsero/react-gtm-hook";
 import { createApiFetch } from "./api";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-    const gtmParams = { id: "GTM-N9WLVDS" };
     const apiFetch = createApiFetch("https://hgwarmap.dphs.nl");
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <GTMProvider state={gtmParams}>
-                <App apiFetch={apiFetch} />
-            </GTMProvider>
+            <App apiFetch={apiFetch} />
         </React.StrictMode>,
     );
 
