@@ -8,7 +8,7 @@ import { createApiFetch } from "./api";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-    const gtmParams = { id: "G-957G87MTC8" };
+    const gtmParams = { id: "GTM-N9WLVDS" };
     const apiFetch = createApiFetch("https://hgwarmap.dphs.nl");
     const root = ReactDOM.createRoot(rootElement);
     root.render(
