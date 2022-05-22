@@ -6,6 +6,7 @@ import RouteMap from "./routeMap";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
 import { CustomForm } from "./formUtils";
 import { Answer } from "./answerUtils";
+import { useGTMDispatch } from "@elgorditosalsero/react-gtm-hook";
 
 export type ATData = {
     speed: number;
@@ -53,12 +54,18 @@ const RouteCalculator = ({
 }: {
     apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
+    const sendDataToGTM = useGTMDispatch();
+
     const [answer, setAnswer] = useState<RouteResult | null>(null);
     const [ATType, setATType] = useState<string | null>(null);
     const [formType, setFormType] = useState(FormTypes.Ground);
 
     const onSubmit = async (data: any) => {
         setATType(data.unit);
+        sendDataToGTM({
+            event: "onSubmit",
+            value: `bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
+        });
         setAnswer(
             await apiFetch<RouteResult>(
                 `/api/battlefieldroute?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
@@ -68,6 +75,12 @@ const RouteCalculator = ({
 
     const onSubmitFly = async (data: any) => {
         setATType(data.unit);
+        sendDataToGTM({
+            event: "onSubmitFly",
+            value: `bftitle1=${data.bftitle1}&bftitle2=${
+                data.bftitle2
+            }&distance=${airATs.get(data.unit)?.transportradius}`,
+        });
         setAnswer(
             await apiFetch<RouteResult>(
                 `/api/planeroute?bftitle1=${data.bftitle1}&bftitle2=${
@@ -79,6 +92,10 @@ const RouteCalculator = ({
 
     const onSubmitPara = async (data: any) => {
         setATType(data.unit);
+        sendDataToGTM({
+            event: "onSubmitPara",
+            value: `bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
+        });
         setAnswer(
             await apiFetch<RouteResult>(
                 `/api/battlefieldseparation?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
