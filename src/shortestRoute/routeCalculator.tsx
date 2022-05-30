@@ -12,7 +12,7 @@ export type ATData = {
     transportradius: number;
 };
 
-const DevCommandnodes = ["hq", "commander", "reserve"];
+const DevCommandnodes = ["hq", "commander"];
 const commandnodes = new Map<string, any>(
     commandnodetemplate
         .filter(e => !DevCommandnodes.includes(e.name))
