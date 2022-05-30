@@ -7,7 +7,7 @@ import { createApiFetch } from "./api";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-    const apiFetch = createApiFetch("https://hgwarmap.dphs.nl");
+    const apiFetch = createApiFetch("https://hgapi.dphs.nl");
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
