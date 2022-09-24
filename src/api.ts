@@ -1,3 +1,5 @@
+import { createContext } from "react";
+
 export function createApiFetch(api: string) {
     const cache = new Map<string, unknown>();
     const inTransit = new Set<string>();
@@ -36,3 +38,5 @@ export function createApiFetch(api: string) {
         return null;
     };
 }
+
+export const apiContext = createContext(createApiFetch("https://hgapi.dphs.nl"));

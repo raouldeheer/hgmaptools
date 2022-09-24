@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createApiFetch } from "./api";
+import { apiContext, createApiFetch } from "./api";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
@@ -11,7 +11,9 @@ if (rootElement) {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <App apiFetch={apiFetch} />
+            <apiContext.Provider value={apiFetch}>
+                <App />
+            </apiContext.Provider>
         </React.StrictMode>,
     );
 

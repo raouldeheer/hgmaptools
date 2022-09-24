@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import battlefields from "./battlefields.json";
 import airfields from "./airfields.json";
 import "./routeCalculator.css";
@@ -6,6 +6,7 @@ import RouteMap from "./routeMap";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
 import { CustomForm } from "./formUtils";
 import { Answer } from "./answerUtils";
+import { apiContext } from "../api";
 
 export type ATData = {
     speed: number;
@@ -48,11 +49,8 @@ export enum FormTypes {
     ParaDrop = "Air to ground",
 }
 
-const RouteCalculator = ({
-    apiFetch,
-}: {
-    apiFetch: <T>(endpoint: string) => Promise<T | null>;
-}): JSX.Element => {
+const RouteCalculator = (): JSX.Element => {
+    const apiFetch = useContext(apiContext);
     const [answer, setAnswer] = useState<RouteResult | null>(null);
     const [ATType, setATType] = useState<string | null>(null);
     const [formType, setFormType] = useState(FormTypes.Ground);
@@ -158,12 +156,11 @@ const RouteCalculator = ({
                         answer={answer}
                         ATType={ATType}
                         commandnodes={commandnodes}
-                        apiFetch={apiFetch}
                     />
                 ) : null}
             </div>
             <div className="Map">
-                <RouteMap answer={answer} apiFetch={apiFetch} />
+                <RouteMap answer={answer} />
             </div>
         </div>
     );

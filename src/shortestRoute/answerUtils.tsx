@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { apiContext } from "../api";
 import { airATs, ATData, groundATs, RouteResult } from "./routeCalculator";
 import RoutePoint from "./routePoint";
 
@@ -5,13 +7,12 @@ export const Answer = ({
     answer,
     ATType,
     commandnodes,
-    apiFetch,
 }: {
     answer: RouteResult;
     ATType: string | null;
     commandnodes: Map<string, ATData>;
-    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
+    const apiFetch = useContext(apiContext);
     return (
         <div className="pathlist">
             <h2>Route</h2>

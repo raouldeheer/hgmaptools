@@ -3,7 +3,8 @@ import { RouteResult } from "./routeCalculator";
 import { Layer, Stage } from "react-konva";
 import MapPoint from "./MapPoint";
 import MapLine from "./MapLine";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import { apiContext } from "../api";
 
 export interface Battlefield {
     id: string;
@@ -20,11 +21,10 @@ export const totalHeight = 11520;
 
 const RouteMap = ({
     answer,
-    apiFetch,
 }: {
     answer: RouteResult | null;
-    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
+    const apiFetch = useContext(apiContext);
     const ref = useRef<HTMLImageElement>(null);
 
     const points = [];
