@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 export function createApiFetch(api: string) {
     const cache = new Map<string, unknown>();
@@ -40,3 +40,5 @@ export function createApiFetch(api: string) {
 }
 
 export const apiContext = createContext(createApiFetch("https://hgapi.dphs.nl"));
+
+export const useApiFetch = () => useContext(apiContext);

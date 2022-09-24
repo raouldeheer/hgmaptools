@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Circle } from "react-konva";
+import { useApiFetch } from "../api";
 import { Battlefield, totalHeight, totalWidth } from "./routeMap";
 
 const MapPoint = ({
     imageRef,
     id,
-    apiFetch,
 }: {
     imageRef: React.RefObject<HTMLImageElement>;
     id: string;
-    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
+    const apiFetch = useApiFetch();
     const [data, setData] = useState<Battlefield | null>(null);
 
     useEffect(() => {

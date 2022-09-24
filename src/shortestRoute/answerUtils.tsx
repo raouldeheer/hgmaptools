@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { apiContext } from "../api";
 import { airATs, ATData, groundATs, RouteResult } from "./routeCalculator";
 import RoutePoint from "./routePoint";
 
@@ -12,7 +10,6 @@ export const Answer = ({
     ATType: string | null;
     commandnodes: Map<string, ATData>;
 }): JSX.Element => {
-    const apiFetch = useContext(apiContext);
     return (
         <div className="pathlist">
             <h2>Route</h2>
@@ -46,12 +43,14 @@ export const Answer = ({
             <p>Path:</p>
             <ul>
                 {answer.path.map(v => (
-                    <RoutePoint key={v} id={v} apiFetch={apiFetch} />
+                    <RoutePoint key={v} id={v} />
                 ))}
             </ul>
         </div>
     );
 };
+
+export default Answer;
 
 const Traveltime = ({
     answer,

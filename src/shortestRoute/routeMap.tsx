@@ -3,8 +3,7 @@ import { RouteResult } from "./routeCalculator";
 import { Layer, Stage } from "react-konva";
 import MapPoint from "./MapPoint";
 import MapLine from "./MapLine";
-import { useContext, useRef } from "react";
-import { apiContext } from "../api";
+import { useRef } from "react";
 
 export interface Battlefield {
     id: string;
@@ -24,7 +23,6 @@ const RouteMap = ({
 }: {
     answer: RouteResult | null;
 }): JSX.Element => {
-    const apiFetch = useContext(apiContext);
     const ref = useRef<HTMLImageElement>(null);
 
     const points = [];
@@ -37,7 +35,6 @@ const RouteMap = ({
                     imageRef={ref}
                     id={element}
                     key={element}
-                    apiFetch={apiFetch}
                 />,
             );
             if (prev)
@@ -47,7 +44,6 @@ const RouteMap = ({
                         id1={prev}
                         id2={element}
                         key={prev + element}
-                        apiFetch={apiFetch}
                     />,
                 );
             prev = element;

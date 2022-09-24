@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
+import { useApiFetch } from "../api";
 
 const RoutePoint = ({
     id,
-    apiFetch,
 }: {
     id: string;
-    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
+    const apiFetch = useApiFetch();
     const [name, setName] = useState("");
 
     useEffect(() => {

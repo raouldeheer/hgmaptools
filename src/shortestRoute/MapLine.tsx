@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { Line } from "react-konva";
+import { useApiFetch } from "../api";
 import { Battlefield, totalHeight, totalWidth } from "./routeMap";
 
 const MapLine = ({
     imageRef,
     id1,
     id2,
-    apiFetch,
 }: {
     imageRef: React.RefObject<HTMLImageElement>;
     id1: string;
     id2: string;
-    apiFetch: <T>(endpoint: string) => Promise<T | null>;
 }): JSX.Element => {
+    const apiFetch = useApiFetch();
     const [data1, setData1] = useState<Battlefield | null>(null);
     const [data2, setData2] = useState<Battlefield | null>(null);
 

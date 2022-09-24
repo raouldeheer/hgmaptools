@@ -11,9 +11,11 @@ if (rootElement) {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <apiContext.Provider value={apiFetch}>
-                <App />
-            </apiContext.Provider>
+            <React.Suspense>
+                <apiContext.Provider value={apiFetch}>
+                    <App />
+                </apiContext.Provider>
+            </React.Suspense>
         </React.StrictMode>,
     );
 

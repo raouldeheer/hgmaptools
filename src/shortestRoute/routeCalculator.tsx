@@ -1,12 +1,13 @@
-import { useContext, useState } from "react";
-import battlefields from "./battlefields.json";
-import airfields from "./airfields.json";
+import { useState } from "react";
 import "./routeCalculator.css";
-import RouteMap from "./routeMap";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
-import { CustomForm } from "./formUtils";
-import { Answer } from "./answerUtils";
-import { apiContext } from "../api";
+import React from "react";
+
+const Answer = React.lazy(() => import('./answerUtils'));
+const RouteMap = React.lazy(() => import('./routeMap'));
+const GTG = React.lazy(() => import('./modes/GTG'));
+const ATA = React.lazy(() => import('./modes/ATA'));
+const ATG = React.lazy(() => import('./modes/ATG'));
 
 export type ATData = {
     speed: number;
@@ -50,41 +51,11 @@ export enum FormTypes {
 }
 
 const RouteCalculator = (): JSX.Element => {
-    const apiFetch = useContext(apiContext);
     const [answer, setAnswer] = useState<RouteResult | null>(null);
     const [ATType, setATType] = useState<string | null>(null);
     const [formType, setFormType] = useState(FormTypes.Ground);
 
-    const onSubmit = async (data: any) => {
-        setATType(data.unit);
-        setAnswer(
-            await apiFetch<RouteResult>(
-                `/api/battlefieldroute?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
-            ),
-        );
-    };
-
-    const onSubmitFly = async (data: any) => {
-        setATType(data.unit);
-        setAnswer(
-            await apiFetch<RouteResult>(
-                `/api/planeroute?bftitle1=${data.bftitle1}&bftitle2=${
-                    data.bftitle2
-                }&distance=${airATs.get(data.unit)?.transportradius}`,
-            ),
-        );
-    };
-
-    const onSubmitPara = async (data: any) => {
-        setATType(data.unit);
-        setAnswer(
-            await apiFetch<RouteResult>(
-                `/api/battlefieldseparation?bftitle1=${data.bftitle1}&bftitle2=${data.bftitle2}`,
-            ),
-        );
-    };
-
-    const onChange = (e: { target: { value: string } }) => {
+    const onChange = (e: { target: { value: string; }; }) => {
         setFormType(e.target.value as FormTypes);
     };
 
@@ -105,49 +76,21 @@ const RouteCalculator = (): JSX.Element => {
                         ))}
                     </select>
                     {formType === FormTypes.Ground ? (
-                        <CustomForm
-                            selectBoxes={[
-                                ["starting city", "bftitle1", battlefields],
-                                [
-                                    "destination airfield",
-                                    "bftitle2",
-                                    battlefields,
-                                ],
-                                [
-                                    "assault team type",
-                                    "unit",
-                                    Array.from(groundATs.keys()),
-                                ],
-                            ]}
-                            onSubmit={onSubmit}
+                        <GTG
+                            setATType={setATType}
+                            setAnswer={setAnswer}
                         />
                     ) : null}
                     {formType === FormTypes.Air ? (
-                        <CustomForm
-                            selectBoxes={[
-                                ["starting airfield", "bftitle1", airfields],
-                                ["destination airfield", "bftitle2", airfields],
-                                [
-                                    "assault team type",
-                                    "unit",
-                                    Array.from(airATs.keys()),
-                                ],
-                            ]}
-                            onSubmit={onSubmitFly}
+                        <ATA
+                            setATType={setATType}
+                            setAnswer={setAnswer}
                         />
                     ) : null}
                     {formType === FormTypes.ParaDrop ? (
-                        <CustomForm
-                            selectBoxes={[
-                                ["starting airfield", "bftitle1", airfields],
-                                ["destination city", "bftitle2", battlefields],
-                                [
-                                    "assault team type",
-                                    "unit",
-                                    Array.from(airATs.keys()),
-                                ],
-                            ]}
-                            onSubmit={onSubmitPara}
+                        <ATG
+                            setATType={setATType}
+                            setAnswer={setAnswer}
                         />
                     ) : null}
                 </div>
