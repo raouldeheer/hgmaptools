@@ -1,43 +1,57 @@
 import {
     FieldValues,
-    UseFormRegister,
     FieldErrors,
     useForm,
     SubmitHandler,
+    Control,
+    Controller,
 } from "react-hook-form";
+import { Autocomplete, TextField } from "@mui/material";
 
 const SelectBox = ({
     name,
     label,
     options,
-    register,
     errors,
+    control,
 }: {
     name: string;
     label: string;
     options: string[];
-    register: UseFormRegister<FieldValues>;
     errors: FieldErrors;
+    control: Control<FieldValues, any>,
 }): JSX.Element => (
     <>
-        <label htmlFor={label}>Choose {name}:</label>
-        <br />
-        <select className="input" id={label} {...register(label)}>
-            {options.map(title => (
-                <option key={title} value={title}>
-                    {title}
-                </option>
-            ))}
-        </select>
-        <br />
+        <Controller
+            name={label}
+            control={control}
+            defaultValue={options[0]}
+            rules={{ required: true, validate: v => options.includes(v) }}
+            render={({ field: { ref, onChange, ...field } }) => (
+                <Autocomplete
+                    options={options}
+                    onChange={(_, data) => onChange(data)}
+                    defaultValue={options[0]}
+                    fullWidth
+                    renderInput={(params) =>
+                        <TextField
+                            {...params}
+                            {...field}
+                            inputRef={ref}
+                            label={name}
+                        />
+                    }
+                />
+            )}
+        />
         {errors[label] && (
             <>
                 <span className="message">
                     {name.charAt(0).toUpperCase() + name.slice(1)} is required
                 </span>
-                <br />
             </>
         )}
+        <br />
     </>
 );
 
@@ -49,9 +63,9 @@ export const CustomForm = ({
     onSubmit: SubmitHandler<FieldValues>;
 }): JSX.Element => {
     const {
-        register,
         handleSubmit,
         formState: { errors },
+        control,
     } = useForm();
     return (
         <>
@@ -62,8 +76,8 @@ export const CustomForm = ({
                         name={box[0]}
                         label={box[1]}
                         options={box[2]}
-                        register={register}
                         errors={errors}
+                        control={control}
                     />
                 ))}
                 <input className="submit" type="submit" />

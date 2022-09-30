@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./routeCalculator.css";
 import commandnodetemplate from "hagcp-assets/json/commandnodetemplate.json";
 import React from "react";
+import { MenuItem, Select } from "@mui/material";
 
 const Answer = React.lazy(() => import('./answerUtils'));
 const RouteMap = React.lazy(() => import('./routeMap'));
@@ -63,18 +64,18 @@ const RouteCalculator = (): JSX.Element => {
         <div className="total">
             <div className="Calculator">
                 <div className="form">
-                    <label htmlFor="formSelect">Choose movement type:</label>
-                    <br />
-                    <select
-                        className="input"
-                        name="select"
-                        id="formSelect"
+                    <h1>Traveltime</h1>
+                    <Select
+                        value={formType}
                         onChange={onChange}
+                        fullWidth
                     >
                         {Object.values(FormTypes).map(type => (
-                            <option key={type}>{type}</option>
+                            <MenuItem value={type}>{type}</MenuItem>
                         ))}
-                    </select>
+                    </Select>
+                    <br />
+                    <br />
                     {formType === FormTypes.Ground ? (
                         <GTG
                             setATType={setATType}
