@@ -121,7 +121,7 @@ function secondsToTimeString(sec: number) {
     let returnStr = "";
     if (hoursStr) returnStr += hoursStr;
     if (minutesStr)
-        returnStr += hoursStr ? minutesStr.padStart(2, "0") : minutesStr;
-    returnStr += minutesStr ? secondsStr.padStart(2, "0") : secondsStr;
+        returnStr += hoursStr ? minutesStr.padStart(3, "0") : minutesStr;
+    returnStr += minutesStr ? secondsStr.padStart(3, "0") : secondsStr;
     return returnStr;
 }
